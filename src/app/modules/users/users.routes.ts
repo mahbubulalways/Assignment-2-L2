@@ -16,8 +16,9 @@ router.route('/:userId')
 // Add New Product in Order
 router.route('/:userId/orders')
 .put(usersController.addOrderController)
-.get(usersController)
+.get(usersController.getUsersOrder)
 
-
+router.route('/:userId/orders/total-price')
+.get(usersController.getOrderTotalPrice)
 
 export const userRoute = router;
