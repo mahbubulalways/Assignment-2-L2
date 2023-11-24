@@ -13,4 +13,20 @@ app.get('/', (req: Request, res: Response) => {
   res.send("Assignment 2's server is ready to work !");
 });
 
+app.all('*', (req: Request, res: Response) => {
+  res.status(400).json({
+    status:false,
+    message:"Route not found"
+  })
+});
+
+app.use((error: any, req: Request, res: Response) => {
+  res.status(500).json({
+    message: 'Something went wrong',
+    error: error,
+  });
+});
+
+
+
 export default app;

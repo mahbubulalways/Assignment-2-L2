@@ -4,8 +4,11 @@ import { UserM } from './users.model';
 // create user
 const createUserService = async (userData: IUsers) => {
   const result = await UserM.create(userData);
-  return result;
+  if (result) {
+    return await UserM.findOne({ userId: userData.userId }).select('-password');
+  } else return null;
 };
+
 
 // get users
 const getUserService = async () => {
@@ -24,8 +27,8 @@ const getSingleUserService = async (id: number) => {
 };
 
 // update user
-const updateUserService = async (id: number, body) => {
-  const result = await UserM.updateOne({ userId: id }, { $set: body });
+const updateUserService = async (id: number, updateData: object) => {
+  const result = await UserM.updateOne({ userId: id }, { $set: updateData });
   if (result.modifiedCount) {
     const data = await UserM.findOne({ userId: id }).select(
       '-_id  -password -orders',
@@ -47,7 +50,7 @@ const deleteUserService = async (id: number) => {
 // Bonus Part
 // Add product in order
 
-const addProductInOrderService = async (id: number, body) => {
+const addProductInOrderService = async (id: number, body: object) => {
   const exist = await UserM.isExistingUser(id);
   if (!exist) {
     throw new Error('User not found');
@@ -67,25 +70,16 @@ const getUsersOrders = async (id: number) => {
   return result;
 };
 
+// get orders total price 
 const getUsersOrdersTotalPrice = async (id: number) => {
-  // const result = await UserM.aggregate([
-  //   { $match: { userId: id } },
-  //   {$unwind:"$orders"},
-  //   { $group: { _id: null, totalPrice: { $sum: "$orders.price" } } },
-  //   {$unwind:"$totalPrice"},
-  //   {
-  //     $project:{ totalPrice:1, _id:-1 }
-  //   }
-  // ]);
-
-  const result = await UserM.findOne({ userId: id })
-  let totalPrice = 0
-  if(result){
-   result.orders.forEach(order=>{
-   totalPrice = totalPrice + order.price
-   })
+  const result = await UserM.findOne({ userId: id });
+  let totalPrice = 0;
+  if (result) {
+    result.orders.forEach((order) => {
+      totalPrice = totalPrice + order.price;
+    });
   }
-  return totalPrice
+  return totalPrice;
 };
 
 export const usersServices = {
