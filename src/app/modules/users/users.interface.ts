@@ -31,7 +31,7 @@ export interface IUsers {
   isActive: boolean;
   hobbies: string[];
   address: IAddress;
-  orders: IOrders[];
+  orders?: IOrders[];
 }
 
 export interface UsersModel extends Model<IUsers> {

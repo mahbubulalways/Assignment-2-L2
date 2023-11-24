@@ -18,7 +18,7 @@ const ZodAddressValidation = z.object({
 // Define the Validation for an order
 const ZodOrderValidation = z.object({
   productName: z.string(),
-  quantity: z.number().int(),
+  quantity: z.number(),
   price: z.number(),
 });
 
@@ -33,8 +33,7 @@ const ZodUserValidation = z.object({
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: ZodAddressValidation,
-  orders: z.array(ZodOrderValidation),
+  orders: z.array(ZodOrderValidation).optional(),
 });
-
 
 export default ZodUserValidation;

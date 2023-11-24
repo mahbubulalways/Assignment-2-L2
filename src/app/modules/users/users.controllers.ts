@@ -7,8 +7,8 @@ const createUserController = async (req: Request, res: Response) => {
   try {
     const body = req.body;
     // zod validation here
-    const passeUserData = ZodUserValidation.parse(body);
-    const result = await usersServices.createUserService(passeUserData);
+    const zodValidateData = ZodUserValidation.parse(body);
+    const result = await usersServices.createUserService(zodValidateData);
     if (!result) {
       return res.status(400).json({
         success: false,
@@ -37,7 +37,7 @@ const getUserController = async (req: Request, res: Response) => {
     if (!result.length) {
       return res.status(400).json({
         success: false,
-        message: 'Users is not found successfully',
+        message: 'Users is not found',
       });
     }
     return res.status(200).json({
@@ -48,7 +48,7 @@ const getUserController = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(400).json({
       success: false,
-      message: 'Users is not found successfully',
+      message: 'Users is not found',
       error: error,
     });
   }
@@ -95,19 +95,26 @@ const updateUserController = async (req: Request, res: Response) => {
     if (!result) {
       return res.status(400).json({
         success: false,
-        message: 'User is not found successfully',
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
       });
     }
     return res.status(200).json({
       success: true,
-      message: 'User is found successfully',
+      message: 'User updated successfully!',
       data: result,
     });
   } catch (error) {
     return res.status(400).json({
       success: false,
-      message: 'User is not found successfully',
-      error: error,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
     });
   }
 };
@@ -199,7 +206,9 @@ const getUsersOrder = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
-      data: result,
+      data: {
+        orders:result.orders
+      },
     });
   } catch (error) {
     return res.status(400).json({

@@ -64,6 +64,7 @@ const usersSchema = new Schema<IUsers, UsersModel>({
   },
   fullName: {
     type: userFullNameSchema,
+    _id:false,
     required: [true, 'Full name is required'],
   },
   age: {
@@ -82,10 +83,12 @@ const usersSchema = new Schema<IUsers, UsersModel>({
   },
   address: {
     type: userAddressSchema,
+    _id:false,
     required: [true, 'Address is required'],
   },
   orders: {
     type: [orderSchema],
+    _id:false,
   },
 });
 
@@ -94,10 +97,7 @@ usersSchema.pre('save', async function (next) {
   next();
 });
 
-// usersSchema.post('save',async function () {
-//  this.password=""
-// })
-
+// static method
 usersSchema.statics.isExistingUser = async function (userId: number) {
   const isExist = await UserM.findOne({ userId: userId });
   return isExist;

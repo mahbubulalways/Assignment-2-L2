@@ -13,6 +13,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send("Assignment 2's server is ready to work !");
 });
 
+// unknown route handling
 app.all('*', (req: Request, res: Response) => {
   res.status(400).json({
     status:false,
@@ -20,7 +21,8 @@ app.all('*', (req: Request, res: Response) => {
   })
 });
 
-app.use((error: any, req: Request, res: Response) => {
+// error handling
+app.use((error:unknown, req: Request, res: Response) => {
   res.status(500).json({
     message: 'Something went wrong',
     error: error,
