@@ -73,6 +73,10 @@ const getUsersOrders = async (id: number) => {
 
 // get orders total price
 const getUsersOrdersTotalPrice = async (id: number) => {
+  const exist = await UserM.isExistingUser(id);
+  if (!exist) {
+    throw new Error('User not found');
+  }
   const result = await UserM.findOne({ userId: id });
   let totalPrice = 0;
   if (result && result.orders) {
