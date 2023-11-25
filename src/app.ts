@@ -29,6 +29,4 @@ app.use((error:unknown, req: Request, res: Response) => {
   });
 });
 
-
-
 export default app;
